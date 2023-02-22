@@ -1,7 +1,10 @@
 package bot.by.khomichenko.javatestbot.config;
 
 import bot.by.khomichenko.javatestbot.domain.Bot;
-import bot.by.khomichenko.javatestbot.service.BotServiceImpl;
+import bot.by.khomichenko.javatestbot.service.impl.BotServiceImpl;
+import bot.by.khomichenko.javatestbot.service.impl.ParserImpl;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -12,10 +15,22 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Component
 public class BotConfig extends TelegramLongPollingBot {
 
-    private Bot bot;
+    final Bot bot;
     private BotServiceImpl botService;
+    private ParserImpl parser;
 
-    @Override
+    public BotConfig(Bot bot) {
+        this.bot = bot;
+//        List<BotCommand> commands = new ArrayList<>();
+//        commands.add(new BotCommand("/start", "get a welcome message"));
+//        commands.add(new BotCommand("/USDT-BTC", "get rate of USDT-BTC"));
+//        try {
+//            this.execute(new SetMyCommands(commands, new BotCommandScopeDefault(),null));
+//        } catch (TelegramApiException exception) {
+//            exception.printStackTrace();
+//        }
+    }
+   @Override
     public String getBotUsername() {
         return bot.getBotName();
     }
@@ -27,7 +42,6 @@ public class BotConfig extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
@@ -36,9 +50,9 @@ public class BotConfig extends TelegramLongPollingBot {
                     sendMessage(chatId,
                             botService.startCommandMessage(update.getMessage().getChat().getFirstName()));
                     break;
-                case "/BTC-USDT":
-                    break;
-                case "/USDT-BTC":
+                case "/usdtbtc":
+                    sendMessage(chatId,
+                            parser.getRate());
                     break;
                 case "/Exchange Btc on Usdt":
                     break;
@@ -67,7 +81,7 @@ public class BotConfig extends TelegramLongPollingBot {
     }
 
     @Autowired
-    public void setBot(Bot bot) {
-        this.bot = bot;
+    public void setParser(ParserImpl parser) {
+        this.parser = parser;
     }
 }

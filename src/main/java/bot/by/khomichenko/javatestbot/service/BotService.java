@@ -6,5 +6,5 @@ public interface BotService {
 
     String getUsdtBtcRate();
 
-    
+
 }

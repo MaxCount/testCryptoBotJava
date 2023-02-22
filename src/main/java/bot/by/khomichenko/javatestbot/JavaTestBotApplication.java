@@ -9,5 +9,4 @@ public class JavaTestBotApplication {
     public static void main(String[] args) {
         SpringApplication.run(JavaTestBotApplication.class, args);
     }
-
 }

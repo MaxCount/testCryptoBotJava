@@ -1,4 +1,4 @@
-package bot.by.khomichenko.javatestbot.domain;
+package bot.by.khomichenko.javatestbot.model;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

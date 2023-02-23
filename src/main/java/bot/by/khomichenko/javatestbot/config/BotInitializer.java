@@ -1,5 +1,6 @@
 package bot.by.khomichenko.javatestbot.config;
 
+import bot.by.khomichenko.javatestbot.controller.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -11,7 +12,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Component
 public class BotInitializer {
 
-    private BotConfig bot;
+    private TelegramBot bot;
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {
@@ -24,7 +25,7 @@ public class BotInitializer {
     }
 
     @Autowired
-    public void setBot(BotConfig bot) {
+    public void setBot(TelegramBot bot) {
         this.bot = bot;
     }
 }

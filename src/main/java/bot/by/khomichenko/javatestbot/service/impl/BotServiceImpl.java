@@ -12,10 +12,15 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public String getUsdtBtcRate() {
-        return null;
+    public Double getUsdtBtc(Integer amount, String rate) {
+        Double rateDouble = Double.parseDouble(rate);
+        return amount * rateDouble;
     }
 
-
+    @Override
+    public Double getBtcUsdt(Integer amount, String rate) {
+        Double rateDouble = Double.parseDouble(rate);
+        return amount / rateDouble;
+    }
 
 }

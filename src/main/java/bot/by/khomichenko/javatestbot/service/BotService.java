@@ -4,7 +4,7 @@ public interface BotService {
 
     String startCommandMessage(String name);
 
-    String getUsdtBtcRate();
+    Double getUsdtBtc(Integer amount, String rate);
 
-
+    Double getBtcUsdt(Integer amount, String rate);
 }

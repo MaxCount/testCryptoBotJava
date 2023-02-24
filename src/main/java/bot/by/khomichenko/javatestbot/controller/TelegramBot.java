@@ -58,59 +58,66 @@ public class TelegramBot extends TelegramLongPollingBot {
                     value = Integer.parseInt(message);
                     sendMessage(chatId,botService.getUsdtBtc(value, parser.getRate()).toString());
                     exchange(chatId);
+                    exhange = null;
                 } catch (Exception e) {
                     sendMessage(chatId,"enter a valid number");
+                    exhange = BTC_ON_USDT;
                 }
-                exhange = null;
+
             }
             else if (Objects.equals(exhange, USDT_ON_BTC)) {
                 try {
                     value = Integer.parseInt(message);
                     sendMessage(chatId,botService.getBtcUsdt(value, parser.getRate()).toString());
                     exchange(chatId);
+                    exhange = null;
                 } catch (Exception e) {
                     sendMessage(chatId,"enter a valid number");
+                    exhange = USDT_ON_BTC;
                 }
-                exhange = null;
             }
 
             switch (message) {
                 case "/start" -> {
-                    this.exhange = WELCOME_COMMAND;
+                    exhange = WELCOME_COMMAND;
                     sendMessage(chatId,
                             botService.startCommandMessage(update.getMessage().getChat().getFirstName()));
                 }
                 case "/usdtbtc" -> {
-                    this.exhange = EXHANGE_COMMAND;
+                    exhange = EXHANGE_COMMAND;
                     sendMessage(chatId,
                             "1 BTC = " + parser.getRate() + " USDT");
                 }
                 case "/exchangebtconusdt" -> {
-                    this.exhange = BTC_ON_USDT;
+                    exhange = BTC_ON_USDT;
                     backButton(chatId, "BTC");
                 }
                 case "/exchangeusdtonbtc" -> {
-                    this.exhange = USDT_ON_BTC;
+                    exhange = USDT_ON_BTC;
                     backButton(chatId, "USDT");
                 }
                 default -> {
-                    if (exhange != null) {
+                    if (exhange != null && Objects.equals(exhange, BTC_ON_USDT) && Objects.equals(exhange, USDT_ON_BTC)) {
                         sendMessage(update.getMessage().getChatId(), "enter another command");
                     }
                 }
             }
         }
         else if (update.hasCallbackQuery()) {
-            String callbackData = update.getCallbackQuery().getData();
-            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            callbackButtons(update);
+        }
+    }
 
-            switch (callbackData) {
-                case YES_BUTTON -> sendMessage(chatId, "request send");
-                case NO_BUTTON -> sendMessage(chatId, "request don't send");
-                case RETURN_BUTTON -> {
-                    exhange = null;
-                    sendMessage(chatId, "ok");
-                }
+    private void callbackButtons(Update update) {
+        String callbackData = update.getCallbackQuery().getData();
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+        switch (callbackData) {
+            case YES_BUTTON -> sendMessage(chatId, "request send");
+            case NO_BUTTON -> sendMessage(chatId, "request don't send");
+            case RETURN_BUTTON -> {
+                exhange = null;
+                sendMessage(chatId, "ok");
             }
         }
     }
@@ -147,7 +154,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMessage(long id, String textToSend) {
+    private void sendMessage(long id, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(id));
         message.setText(textToSend);

@@ -37,8 +37,11 @@
             <artifactId>json</artifactId>
             <version>20180130</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.wavesplatform</groupId>
+            <artifactId>wavesj</artifactId>
+            <version>0.8</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -46,6 +49,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>
